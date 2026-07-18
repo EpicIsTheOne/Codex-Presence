@@ -1,0 +1,40 @@
+# Dependencies and compiled output
+node_modules/
+/website/
+dist/
+release/
+
+# Native build output and locally downloaded Discord SDK
+.sdk-stage/
+native/discord-presence-bridge/build*/
+vendor/discord-social-sdk/bin/
+vendor/discord-social-sdk/include/
+vendor/discord-social-sdk/lib/
+
+# Local QA and design-generation output
+artifacts/
+assets/design/
+design-qa.md
+scripts/capture-redesign.cjs
+scripts/qa-server.cjs
+src/renderer/assets/codex-system-red.png
+*.log
+coverage/
+.local-backups/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.pfx
+*.p12
+*.key
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.user
+*.suo

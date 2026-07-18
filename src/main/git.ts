@@ -1,0 +1,3 @@
+import {execFile} from 'node:child_process'; import {promisify} from 'node:util'; const exec=promisify(execFile);
+export async function gitBranch(cwd:string):Promise<string|null>{try{const {stdout}=await exec('git',['-C',cwd,'symbolic-ref','--short','HEAD'],{timeout:1500,windowsHide:true});return stdout.trim()||null;}catch{try{const {stdout}=await exec('git',['-C',cwd,'rev-parse','--short','HEAD'],{timeout:1500,windowsHide:true});return stdout.trim()?`detached@${stdout.trim()}`:null;}catch{return null;}}}
+export async function gitChangedRecently(cwd:string):Promise<boolean>{try{const {stdout}=await exec('git',['-C',cwd,'status','--porcelain'],{timeout:1500,windowsHide:true});return Boolean(stdout.trim());}catch{return false;}}

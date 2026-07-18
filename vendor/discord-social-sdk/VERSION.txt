@@ -1,0 +1,2 @@
+Discord Social SDK 1.9.17379
+Official standalone C++ archive downloaded from the Discord Developer Portal on 2026-07-12.

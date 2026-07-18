@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Codex Presence</title>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <img class="codex-icon" src="./assets/codex.png" alt="">
+      <strong>Codex Presence</strong>
+    </div>
+    <nav aria-label="Primary navigation">
+      <button class="nav active" data-tab="overview"><span class="nav-icon">&#xE80F;</span><span>Overview</span></button>
+      <button class="nav" data-tab="profiles"><span class="nav-icon">&#xE77B;</span><span>Profiles</span></button>
+      <button class="nav" data-tab="automations"><span class="nav-icon">&#xE945;</span><span>Automations</span></button>
+      <button class="nav" data-tab="privacy"><span class="nav-icon">&#xEA18;</span><span>Privacy</span></button>
+      <button class="nav" data-tab="assets" data-feature="discord-assets" hidden><span class="nav-icon">&#xE8B7;</span><span>Assets</span></button>
+      <button class="nav" data-tab="healthpage"><span class="nav-icon">&#xE95E;</span><span>Health</span></button>
+      <button class="nav" data-tab="appearance"><span class="nav-icon">&#xE790;</span><span>Appearance</span></button>
+      <button class="nav" data-tab="settings"><span class="nav-icon">&#xE713;</span><span>Settings</span></button>
+    </nav>
+    <div class="side-health" aria-live="polite">
+      <i id="sideDot"></i>
+      <div><strong id="sideStatus">Disabled</strong><small id="sideBackend">Presence is off</small></div>
+    </div>
+  </aside>
+
+  <main>
+    <header class="page-header">
+      <div><h1 id="pageTitle">Overview</h1><p id="pageSubtitle">Your presence at a glance.</p></div>
+      <button class="primary-action" id="toggle"><span class="button-icon">&#xE768;</span><span>Start presence</span></button>
+    </header>
+
+    <section class="page active" id="overview">
+      <div class="status-strip">
+        <article class="status-item"><span class="status-icon discord-icon"><img src="./assets/discord-symbol.svg" alt=""></span><div><small>Discord</small><strong id="discordState">Disabled</strong><span id="discordStateMeta">Presence is off</span></div></article>
+        <article class="status-item"><span class="status-icon"><span class="fluent">&#xE756;</span></span><div><small>Rich Presence</small><strong id="presenceState">Off</strong><span id="presenceStateMeta">Not broadcasting</span></div></article>
+        <article class="status-item"><span class="status-icon activity-orb"><i id="activityDot"></i></span><div><small>Codex</small><strong id="codexState">Not detected</strong><span id="codexStateMeta">Waiting for activity</span></div></article>
+        <article class="status-item"><span class="status-icon"><span class="fluent">&#xE823;</span></span><div><small>Session time</small><strong id="sessionTime">0:00</strong><span id="sessionLabel">No agent working</span></div></article>
+      </div>
+
+      <div class="overview-grid">
+        <article class="surface current-activity">
+          <p class="surface-label">Current activity</p>
+          <div class="activity-heading"><i></i><h2 id="activity">Idle</h2></div>
+          <div class="project-line"><span class="fluent">&#xE72E;</span><strong id="details">Presence disabled</strong></div>
+          <p id="previewState" class="muted">Local-first privacy active</p>
+          <dl class="context-grid">
+            <div><dt>Project</dt><dd id="project">Not detected</dd></div>
+            <div><dt>Branch</dt><dd id="branch">Unavailable</dd></div>
+            <div><dt>Source</dt><dd id="source">Local detector</dd></div>
+            <div><dt>Updated</dt><dd id="updated">now</dd></div>
+            <div><dt>Privacy</dt><dd id="privacyStatus">Protected</dd></div>
+            <div><dt>Rule</dt><dd id="matchedRule">None</dd></div>
+          </dl>
+        </article>
+
+        <article class="preview-section">
+          <p class="surface-label">Discord presence preview</p>
+          <div class="discord-preview">
+            <img class="preview-icon" src="./assets/codex.png" alt="">
+            <div><strong>Codex Presence <small class="app-badge">APP</small></strong><span id="discordPreviewText">Presence disabled</span><small id="discordPreviewContext">Private Project</small><small id="discordPreviewElapsed">0:00 elapsed</small></div>
+            <i class="preview-status"></i>
+          </div>
+        </article>
+      </div>
+
+      <div class="trust-note"><span class="fluent">&#xE72E;</span><p>Your project name and activity are only visible when you choose to share them.<br>Presence data stays on this device.</p></div>
+
+      <article class="activity-log">
+        <div class="surface-title"><span>Recent activity</span><button class="text-button" data-open-tab="automations">View all</button></div>
+        <div id="timeline" class="timeline"></div>
+      </article>
+
+      <div class="metrics sr-metrics" aria-label="Runtime details">
+        <span id="projectCount">0</span><span id="health">Inactive</span><span id="connection">disabled</span><span id="sessionStatus">Waiting</span><span id="elapsed">Timer hidden</span>
+      </div>
+      <div id="error" class="error" role="alert"></div>
+    </section>
+
+    <section class="page" id="profiles">
+      <div class="profile-layout">
+        <div>
+          <h2 class="section-heading">Profiles</h2>
+          <article class="profile automatic active-profile">
+            <img class="profile-image" src="./assets/codex.png" alt="">
+            <div><h3 id="activeProfileName">Automatic</h3><p>Applied and active</p></div>
+            <span class="tag active-tag">Active</span>
+          </article>
+          <div id="profileGrid" class="profile-list"></div>
+        </div>
+        <div class="profile-side">
+          <h2 class="section-heading">Current behavior</h2>
+          <article class="surface behavior-card">
+            <label><span><span class="fluent">&#xE72E;</span> Activity choice</span><select id="profileActivity"><option value="">Automatic</option><option>Planning</option><option>Coding</option><option>Editing</option><option>Running Tests</option><option>Waiting for Approval</option><option>Idle</option></select></label>
+            <p><span><span class="fluent">&#xEA18;</span> Visibility</span><strong id="profileVisibility">Private</strong></p>
+            <p><span><span class="fluent">&#xE823;</span> Updates</span><strong>Automatic</strong></p>
+          </article>
+          <h2 class="section-heading preview-heading">Discord presence preview</h2>
+          <div class="discord-preview compact-preview"><img class="preview-icon" src="./assets/codex.png" alt=""><div><strong>Codex Presence <small class="app-badge">APP</small></strong><span id="profilePreviewText">Automatic activity</span><small id="profilePreviewProject">Private</small><small id="profilePreviewElapsed">0:00 elapsed</small></div><i class="preview-status"></i></div>
+          <div class="trust-note compact-trust"><span class="fluent">&#xE72E;</span><p>Your project name and activity are only visible when you choose to share them. Presence data stays on this device.</p></div>
+        </div>
+      </div>
+      <article class="templates-section">
+        <div class="surface-title stacked-title"><div><span>Project status templates</span><p>Set a custom Discord status for each detected project. Leave empty to use automatic status.</p></div><small id="editingProfile">Active profile</small></div>
+        <div id="projectTemplates" class="template-list"></div>
+      </article>
+    </section>
+
+    <section class="page" id="automations">
+      <div class="feature-summary">
+        <div><span class="feature-icon fluent">&#xE945;</span><div><small>Automation engine</small><h2>Presence rules</h2><p>Change status, visibility, or hide presence based on activity, project, weekday, and time.</p></div></div>
+        <div class="match-summary"><small>Active matches</small><strong><i></i><span id="ruleMatchCount">0</span></strong><span id="ruleMatchLabel">No rules currently matched</span></div>
+      </div>
+      <div class="automation-layout">
+        <article class="surface rule-list-panel">
+          <div class="surface-title"><span>Rules</span><small id="ruleCount">0 configured</small></div>
+          <div id="rules" class="rule-list"></div>
+          <button class="secondary-action" id="newRule">New rule</button>
+          <p class="rule-note">Rules are evaluated from top to bottom. The first matching rule takes effect.</p>
+        </article>
+        <article class="surface rule-editor" id="ruleEditor">
+          <div class="surface-title"><span>Rule editor</span><button class="text-button danger-text" id="deleteRule">Delete</button></div>
+          <label class="full-field"><span class="visually-hidden">Rule name</span><input id="ruleName" maxlength="48" placeholder="Rule name"></label>
+          <div class="controls compact">
+            <label>When activity is<select id="ruleActivity"><option value="">Any activity</option><option>Planning</option><option>Coding</option><option>Editing</option><option>Running Tests</option><option>Waiting for Approval</option><option>Idle</option></select></label>
+            <label>For project<select id="ruleProject"><option value="">Any project</option></select></label>
+            <label>From<input id="ruleStart" type="time"></label>
+            <label>Until<input id="ruleEnd" type="time"></label>
+            <label>Set activity<select id="ruleActionActivity"><option value="">Keep detected</option><option>Planning</option><option>Coding</option><option>Editing</option><option>Running Tests</option><option>Waiting for Approval</option><option>Idle</option></select></label>
+            <label>Custom status<input id="ruleStatus" maxlength="64" placeholder="Optional"></label>
+          </div>
+          <div class="inline-switches"><label><input id="ruleEnabled" type="checkbox"> Enabled</label><label><input id="rulePrivate" type="checkbox"> Private project</label><label><input id="ruleHide" type="checkbox"> Hide presence</label></div>
+          <button class="primary-action align-end" id="saveRule">Save rule</button>
+        </article>
+      </div>
+      <article class="surface timeline-panel">
+        <div class="surface-title"><span>Activity history</span><div class="panel-actions"><select id="timelineFilter"><option value="">All time</option><option value="activity">Activity</option><option value="project">Projects</option><option value="presence">Presence</option><option value="connection">Connection</option></select><button class="secondary-action compact-button" id="clearTimeline">Clear</button></div></div>
+        <div id="fullTimeline" class="timeline full-timeline"></div>
+      </article>
+    </section>
+
+    <section class="page" id="privacy">
+      <article class="privacy-posture">
+        <div class="posture-copy"><span class="posture-icon fluent">&#xEA18;</span><div><small>Privacy posture</small><strong>Protected</strong><p>Your projects are protected with local-first privacy controls.</p></div></div>
+        <div class="privacy-count"><small>Protected projects</small><strong id="protectedCount">0</strong><span><b id="totalCount">0</b> local projects</span></div>
+        <div class="panic-wrap"><button class="panic-button" id="privacyPanic"><span class="fluent">&#xEA18;</span> Privacy Panic</button><p>Immediately restricts project visibility and protects your data.</p></div>
+      </article>
+      <div class="privacy-layout">
+        <article class="surface project-visibility">
+          <div class="surface-title stacked-title"><div><span>Project visibility</span><p>Control which projects are visible and how they appear.</p></div><small id="shownProjectCount"></small></div>
+          <div class="project-tools"><label class="search-field"><span class="fluent">&#xE721;</span><input id="projectSearch" placeholder="Search projects..."></label><div id="privacySwitches" class="privacy-switches"></div></div>
+          <div id="projects" class="projects"></div>
+          <div class="audit-cards" aria-label="Project privacy counts"><span><b id="privateCount">0</b> private</span><span><b id="localCount">0</b> visible</span></div>
+        </article>
+        <article class="surface privacy-controls">
+          <h2 class="section-heading">Privacy controls</h2>
+          <div class="global-privacy" id="globalPrivacySwitches"></div>
+          <div class="protected-fields"><h3>Protected fields</h3><p>Your data stays on this device.</p><ul><li>Full project paths</li><li>File contents</li><li>Prompts and conversations</li><li>Hidden project names</li></ul></div>
+          <p class="privacy-footnote">No prompts or files leave this device.<br>Your data remains local.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="assets" data-feature="discord-assets" hidden>
+      <div class="asset-layout">
+        <article class="asset-editor">
+          <h2 class="section-heading">Discord artwork</h2><p class="section-description">Configure the artwork and text shown in your Discord presence.</p>
+          <p class="field-heading">Codex icon</p>
+          <div class="asset-hero"><img src="./assets/codex.png" alt="Codex icon"><div><strong>Codex icon</strong><span>Primary app artwork · bundled locally</span></div><span class="asset-ready"><i></i> Ready</span></div>
+          <div class="asset-fields">
+            <label>Large image key<span class="validated-field"><input id="largeImageKey" maxlength="64" placeholder="codex"><i class="fluent">&#xE73E;</i></span></label>
+            <label>Large image text<span class="validated-field"><input id="largeImageText" maxlength="128" placeholder="Codex"><i class="fluent">&#xE73E;</i></span></label>
+            <label>Small image key<span class="validated-field"><input id="smallImageKey" maxlength="64" placeholder="coding"><i class="fluent">&#xE73E;</i></span></label>
+            <label>Small image text<span class="validated-field"><input id="smallImageText" maxlength="128" placeholder="Coding"><i class="fluent">&#xE73E;</i></span></label>
+          </div>
+          <div id="assetValidation" class="error" role="alert"></div>
+          <p class="asset-help"><span class="fluent">&#xE946;</span> Match these keys to assets uploaded in your Discord Developer Portal. Changes appear in the live preview immediately.</p>
+        </article>
+        <article class="asset-preview-column">
+          <h2 class="section-heading">Live preview</h2><p class="section-description">This is how your presence appears in Discord.</p>
+          <div class="discord-preview asset-preview"><div class="preview-image-wrap"><img class="preview-icon large" src="./assets/codex.png" alt=""><span id="smallAssetDot"></span></div><div><strong>Codex Presence</strong><span id="assetPreviewDetails">Working with Codex</span><small id="assetPreviewState">Local project</small></div></div>
+        </article>
+      </div>
+      <article class="implementation-note"><span class="feature-icon fluent">&#xE756;</span><div><strong>Implementation notes</strong><p>Use these keys in your Discord activity payload. Ensure the assets exist in your Discord Developer Portal.</p><code>{ "assets": { "large_image": "codex", "large_text": "Codex", "small_image": "coding", "small_text": "Coding" } }</code></div></article>
+    </section>
+
+    <section class="page" id="healthpage">
+      <div class="doctor-hero">
+        <div class="doctor-copy"><img src="./assets/codex.png" alt=""><div><small>System doctor</small><h2 id="doctorHeadline">Ready to inspect</h2><p id="doctorSummary">Run a local check of Discord connection, Codex detection, privacy controls, and native bridge health.</p></div></div>
+        <button class="primary-action" id="runDoctor"><span class="button-icon">&#xE768;</span><span>Run doctor</span></button>
+        <div class="doctor-score"><small>Last check</small><strong id="doctorScore">—</strong><span id="doctorTime">Not run yet</span></div>
+      </div>
+      <h2 class="section-heading checks-heading">Checks included</h2>
+      <div id="doctorChecks" class="doctor-grid">
+        <article class="doctor-check pending"><i></i><span class="check-icon discord-icon"><img src="./assets/discord-symbol.svg" alt=""></span><strong>Discord connection</strong><p>Verify local Discord connectivity and IPC.</p><b>Not run yet</b></article>
+        <article class="doctor-check pending"><i></i><span class="check-icon fluent">&#xE756;</span><strong>Codex detection</strong><p>Check Codex Presence is detected and responding.</p><b>Not run yet</b></article>
+        <article class="doctor-check pending"><i></i><span class="check-icon fluent">&#xEA18;</span><strong>Privacy controls</strong><p>Validate presence privacy and visibility settings.</p><b>Not run yet</b></article>
+        <article class="doctor-check pending"><i></i><span class="check-icon fluent">&#xE71B;</span><strong>Native bridge</strong><p>Confirm native bridge components are healthy.</p><b>Not run yet</b></article>
+      </div>
+      <div class="health-utilities">
+        <article><span class="utility-icon fluent">&#xE896;</span><div><strong>Export diagnostics</strong><p>Create a sanitized support bundle with settings, health, and recent runtime events.</p></div><span class="tag">Sanitized</span><button class="primary-action" id="exportDiagnostics">Export</button></article>
+        <article><span class="utility-icon fluent">&#xEBC5;</span><div><strong>Tray controls</strong><p>Start, stop, open, or quit Codex Presence from the Windows system tray.</p></div><span class="available">Always available</span></article>
+      </div>
+      <div id="operationMessage" class="operation-message" role="status"></div>
+    </section>
+
+    <section class="page" id="appearance">
+      <div class="appearance-layout">
+        <article class="surface appearance-controls">
+          <h2 class="section-heading">Theme</h2><p class="section-description">Choose how Codex Presence looks.</p>
+          <div class="theme-options">
+            <button class="theme-card" data-theme="midnight"><i></i><span><strong>Midnight <small class="app-badge">Recommended</small></strong><em>Deep blue command center</em></span></button>
+            <button class="theme-card" data-theme="violet"><i></i><span><strong>Violet</strong><em>Brighter Codex energy</em></span></button>
+            <button class="theme-card" data-theme="system"><i></i><span><strong>System</strong><em>Follow Windows preference</em></span></button>
+          </div>
+          <label class="accent-control"><span>Accent color<small>Used for controls, focus, and active states.</small></span><input id="accentColor" type="color" value="#7c78ff"></label>
+        </article>
+        <article class="surface theme-preview">
+          <div class="surface-title"><span>Preview</span><small id="themeName">Midnight</small></div>
+          <div class="mini-window"><img class="theme-preview-image" src="./assets/appearance-preview.png" alt="Preview of Codex Presence using the selected theme"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page" id="settings">
+      <div class="settings-layout">
+        <div class="settings-main">
+          <article class="settings-section connection-section">
+            <h2>Connection</h2>
+            <div class="connection-card"><span class="discord-icon"><img src="./assets/discord-symbol.svg" alt=""></span><div><small>Discord integration</small><strong id="settingsConnectionState">Ready</strong></div><div><small>Built in</small><span>Integrated backend</span></div><i id="settingsConnectionDot"></i></div>
+            <p>Discord integration is built in and ready to use.</p>
+          </article>
+          <article class="settings-section settings-group">
+            <h2>Detection</h2>
+            <div id="detectionSwitch"></div>
+            <label><span>Custom status<small>Sanitized locally (overrides automatic status)</small></span><input id="customStatus" maxlength="64"></label>
+            <label><span>Manual project<small>Fallback project name when detection fails</small></span><input id="manualProject" maxlength="64"></label>
+            <label><span>Manual activity<small>Fallback activity when detection fails</small></span><select id="manualActivity"><option value="">Automatic</option><option>Planning</option><option>Coding</option><option>Editing</option><option>Running Tests</option><option>Waiting for Approval</option><option>Idle</option></select></label>
+          </article>
+          <article class="settings-section settings-group"><h2>Display</h2><div class="switches" id="displaySwitches"></div></article>
+        </div>
+        <aside class="settings-side">
+          <article class="settings-section"><h2>Discord presence preview</h2><div class="discord-preview settings-preview"><img class="preview-icon" src="./assets/codex.png" alt=""><div><strong>Codex Presence <small class="app-badge">APP</small></strong><span id="settingsPreviewText">Presence disabled</span><small id="settingsPreviewContext">Private Project</small><small id="settingsPreviewElapsed">0:00 elapsed</small></div></div><p>This is how your presence will appear. Updates in real time.</p></article>
+          <article class="settings-section timer-panel"><h2>Timer</h2><div><span class="fluent timer-icon">&#xE823;</span><p><small>Session time</small><strong id="settingsSessionTime">0:00</strong><span id="settingsTimerState">Waiting</span></p></div><button class="secondary-action" id="reset">Reset timer</button></article>
+          <article class="settings-section"><h2>Startup</h2><div id="behaviorSwitches"></div></article>
+          <article class="settings-section idle-panel"><h2>Idle</h2><label><span>Idle timeout<small>Set how long before presence is marked idle.</small></span><span class="number-field"><input id="idleTimeoutMinutes" type="number" min="1" max="1440"><b>minutes</b></span></label></article>
+        </aside>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="./app.ts"></script>
+</body>
+</html>

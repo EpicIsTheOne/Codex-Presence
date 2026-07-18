@@ -1,0 +1,47 @@
+{
+  "name": "codex-presence",
+  "productName": "Codex Presence",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Privacy-first Discord Rich Presence for Codex",
+  "author": "EpicIsTheOne",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/EpicIsTheOne/Codex-Presence",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EpicIsTheOne/Codex-Presence.git"
+  },
+  "main": "dist/main/index.js",
+  "scripts": {
+    "dev": "npm run build && electron .",
+    "start": "electron .",
+    "lint": "eslint src vite.config.ts electron-builder.config.cjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --root .",
+    "build": "node scripts/clean-build.cjs && tsc -p tsconfig.build.json && vite build",
+    "native:configure": "cmake -S native/discord-presence-bridge -B native/discord-presence-bridge/build-ninja -G Ninja -DCMAKE_BUILD_TYPE=Release",
+    "native:build": "cmake --build native/discord-presence-bridge/build-ninja --config Release",
+    "package:dir": "npm run build && electron-builder --config electron-builder.config.cjs --dir",
+    "package:win": "npm run build && electron-builder --config electron-builder.config.cjs --win nsis --x64",
+    "package:linux": "npm run build && electron-builder --config electron-builder.config.cjs --linux AppImage deb --x64",
+    "package:mac": "npm run build && electron-builder --config electron-builder.config.cjs --mac dmg zip --x64 --arm64",
+    "smoke": "node scripts/smoke.cjs",
+    "smoke:icon": "electron scripts/icon-smoke-app",
+    "release:verify": "node scripts/verify-release.cjs"
+  },
+  "dependencies": {
+    "@xhayper/discord-rpc": "^1.3.4",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.31.0",
+    "@types/node": "^22.16.5",
+    "electron": "^43.1.1",
+    "electron-builder": "^26.15.3",
+    "eslint": "^9.31.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.38.0",
+    "vite": "^7.0.5",
+    "vitest": "^3.2.4"
+  }
+}
