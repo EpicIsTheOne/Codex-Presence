@@ -1,7 +1,7 @@
 {
   "name": "codex-presence",
   "productName": "Codex Presence",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": false,
   "description": "Privacy-first Discord Rich Presence for Codex",
   "author": {

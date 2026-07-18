@@ -246,7 +246,7 @@
           <article class="settings-section"><h2>Discord presence preview</h2><div class="discord-preview settings-preview"><img class="preview-icon" src="./assets/codex.png" alt=""><div><strong>Codex Presence <small class="app-badge">APP</small></strong><span id="settingsPreviewText">Presence disabled</span><small id="settingsPreviewContext">Private Project</small><small id="settingsPreviewElapsed">0:00 elapsed</small></div></div><p>This is how your presence will appear. Updates in real time.</p></article>
           <article class="settings-section timer-panel"><h2>Timer</h2><div><span class="fluent timer-icon">&#xE823;</span><p><small>Session time</small><strong id="settingsSessionTime">0:00</strong><span id="settingsTimerState">Waiting</span></p></div><button class="secondary-action" id="reset">Reset timer</button></article>
           <article class="settings-section"><h2>Startup</h2><div id="behaviorSwitches"></div></article>
-          <article class="settings-section idle-panel"><h2>Idle</h2><label><span>Idle timeout<small>Set how long before presence is marked idle.</small></span><span class="number-field"><input id="idleTimeoutMinutes" type="number" min="1" max="1440"><b>minutes</b></span></label></article>
+          <article class="settings-section idle-panel"><h2>Idle</h2><label><span>Hide presence while idle<small>Remove your Discord presence immediately when Codex becomes idle.</small></span><input id="hideWhenIdle" type="checkbox" role="switch"></label><label><span>Idle timeout<small>Hide presence after this long when immediate hiding is off.</small></span><span class="number-field"><input id="idleTimeoutMinutes" type="number" min="1" max="1440"><b>minutes</b></span></label></article>
         </aside>
       </div>
     </section>

@@ -13,6 +13,7 @@ import {createRuntimeDoctor,exportDiagnosticsBundle} from './diagnostics';
 import {privacyPanicPatch} from './privacy-panic';
 import {registerRuntimeControlIpc} from './runtime-controls';
 import {createTrayMenu} from './tray-menu';
+import {shouldHidePresenceForIdle} from './idle';
 
 let win:BrowserWindow|null=null,tray:Tray|null=null,startedAt=Date.now(),idleSince:number|null=null;
 let connection:ViewState['connection']='disabled',backend:ViewState['backend']='none',error:string|null=null,state:ViewState;
@@ -33,8 +34,6 @@ function record(kind:RuntimeEventKind,message:string){
 }
 
 const discord=new DiscordService((s,e,b)=>{if(s!==connection)record('connection',`Discord ${s}`);connection=s;backend=b??backend;error=e??null;void refresh(false);});
-export function presenceTimedOut(activity:string,idleStarted:number|null,timeoutMinutes:number,now=Date.now()):boolean{return activity==='Idle'&&idleStarted!==null&&now-idleStarted>=timeoutMinutes*60_000;}
-
 async function refresh(sync=true){
   const settings=getSettings(),[rawDetection,projects]=await Promise.all([detect(settings),discoverProjects(settings)]);
   const automated=applyPresenceRules(settings,rawDetection),detection={...rawDetection,activity:automated.activity};
@@ -45,7 +44,7 @@ async function refresh(sync=true){
     runtimeSession={...runtimeSession,lastActiveAt:Math.max(runtimeSession.lastActiveAt,detection.updatedAt),active:detection.activity!=='Idle'};
   }
   if(detection.activity==='Idle')idleSince??=now;else idleSince=null;
-  const timedOut=presenceTimedOut(detection.activity,idleSince,settings.idleTimeoutMinutes),hidden=timedOut||automated.hidden;
+  const idleHidden=shouldHidePresenceForIdle(detection.activity,idleSince,settings.idleTimeoutMinutes,settings.hideWhenIdle),hidden=idleHidden||automated.hidden;
   const payload=hidden?null:buildPayload(automated.settings,detection,runtimeSession.startedAt),visible=settings.enabled&&payload!==null;
   if(lastActivity!==null&&lastActivity!==detection.activity)record('activity',`Activity changed to ${detection.activity}`);
   if(lastProjectId!==null&&lastProjectId!==detection.projectId)record('project',detection.project?'Active project changed':'No active project');
