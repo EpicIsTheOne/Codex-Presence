@@ -2,7 +2,7 @@
 
 Privacy-first Discord Rich Presence for Codex. Codex Presence watches local Codex session metadata, publishes a conservative activity summary to the Discord desktop client, and keeps project details private unless you explicitly share them.
 
-![Codex Presence overview](docs/images/app-overview.png)
+![Codex Presence overview](docs/images/app-overview-2026-07-18.png)
 
 > Community-made. Not affiliated with or endorsed by OpenAI or Discord.
 
