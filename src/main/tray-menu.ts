@@ -23,7 +23,7 @@ export function createTrayMenu(settings:Settings,state:ViewState,actions:TrayMen
       ...activities.map(activity=>({label:activity,type:'radio' as const,checked:settings.manualActivity===activity,click:()=>actions.setActivity(activity)})),
     ]},
     {label:'Profile',submenu:[
-      {label:'No profile',type:'radio',checked:!settings.activeProfileId,click:()=>actions.setProfile(null)},
+      {label:'Custom',type:'radio',checked:!settings.activeProfileId,click:()=>actions.setProfile(null)},
       ...settings.profiles.map(profile=>({label:profile.name,type:'radio' as const,checked:settings.activeProfileId===profile.id,click:()=>actions.setProfile(profile.id)})),
     ]},
     {label:'Reset Timer',click:actions.resetTimer},

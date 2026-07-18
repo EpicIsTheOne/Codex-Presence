@@ -14,4 +14,15 @@ describe('automatic status format',()=>{
     const payload=buildPayload(defaults,{...detection,activity:'Idle'},100);
     expect(payload.details).toBe('Idle in Private Project');
   });
+
+  it('shows the project beside a custom status when project sharing is enabled',()=>{
+    const payload=buildPayload({...defaults,privateProject:false,showProject:true,customStatus:'Deep focus'},detection,100);
+    expect(payload.details).toBe('Deep focus');
+    expect(payload.state).toContain('Codex Activity');
+  });
+
+  it('never shows a hidden project beside a custom status',()=>{
+    const payload=buildPayload({...defaults,privateProject:false,showProject:true,customStatus:'Deep focus',hiddenProjectIds:[detection.projectId]},detection,100);
+    expect(payload.state).not.toContain('Codex Activity');
+  });
 });

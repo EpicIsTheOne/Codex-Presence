@@ -7,6 +7,7 @@ export function buildPayload(s:Settings,d:Detection,startedAt:number):PresencePa
   const automatic=s.automaticStatusTemplate.replace(/\{(action|activity|project|model)\}/g,(_token,key:string)=>({action:d.activity==='Idle'?'Idle':'Working',activity:d.activity,project,model:d.model?sanitizeText(d.model,32):'Codex'}[key]??''));
   const details=s.customStatus?sanitizeText(s.customStatus):sanitizeText(automatic,128);
   const bits:string[]=[];
+  if(s.customStatus&&!s.privateProject&&!hidden&&s.showProject&&d.project)bits.push(sanitizeText(d.project));
   if(s.showActivity)bits.push(d.activity);
   if(s.showBranch&&d.branch)bits.push(`Branch: ${sanitizeText(d.branch,32)}`);
   if(s.showModel&&d.model)bits.push(sanitizeText(d.model,32));
